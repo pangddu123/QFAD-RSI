@@ -128,7 +128,8 @@ class PassageEntityRetriever:
         # Build ent_node_to_chunk_ids from openie results
         self.ent_node_to_chunk_ids = {}
         if os.path.isfile(self.openie_results_path):
-            all_info = json.load(open(self.openie_results_path)).get("docs", [])
+            with open(self.openie_results_path) as handle:
+                all_info = json.load(handle).get("docs", [])
             ner_dict, triple_dict = reformat_openie_results(all_info)
             for cid in self.passage_node_keys:
                 if cid not in triple_dict:
@@ -179,7 +180,7 @@ class PassageEntityRetriever:
         if len(self.fact_embeddings) == 0:
             return np.array([])
         scores = np.dot(self.fact_embeddings, qe.T)
-        scores = np.squeeze(scores) if scores.ndim == 2 else scores
+        scores = np.asarray(scores).reshape(-1)
         return min_max_normalize(scores)
 
     # ------------------------------------------------------------------
@@ -193,7 +194,7 @@ class PassageEntityRetriever:
                 query, instruction=get_query_instruction("query_to_passage"), norm=True
             )
         scores = np.dot(self.passage_embeddings, qe.T)
-        scores = np.squeeze(scores) if scores.ndim == 2 else scores
+        scores = np.asarray(scores).reshape(-1)
         scores = min_max_normalize(scores)
         sorted_ids = np.argsort(scores)[::-1]
         return sorted_ids, scores[sorted_ids]

@@ -172,7 +172,7 @@ class IGraphQAFD:
         # Edge weight cache
         self._edge_weight_cache: Dict[Tuple[int, int], float] = {}
 
-        random.seed(random_seed)
+        self._rng = random.Random(random_seed)
 
         # Warm-start x: multi-step lazy random walk from seed distribution
         if qa_warm_delta > 0:
@@ -378,7 +378,7 @@ class IGraphQAFD:
                         pushes += 1
             else:
                 # Single push: process one random excess node (original)
-                node_idx = int(random.choice(excess_indices))
+                node_idx = int(self._rng.choice(excess_indices))
                 if self._push(node_idx):
                     pushes += 1
 

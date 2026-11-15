@@ -87,25 +87,11 @@ class OpenIE:
 
     def _call_llm(self, messages: List[Dict[str, str]]) -> str:
         """Convert chat messages to a single LLM call."""
-        system_prompt = None
-        history = []
-        user_prompt = ""
-        for msg in messages:
-            if msg["role"] == "system":
-                system_prompt = msg["content"]
-            elif msg["role"] == "assistant":
-                history.append(msg)
-            elif msg["role"] == "user":
-                # All user messages except the last go into history
-                if user_prompt:
-                    history.append({"role": "user", "content": user_prompt})
-                user_prompt = msg["content"]
-
         return _run_sync(
             self.llm_func(
-                prompt=user_prompt,
-                system_prompt=system_prompt,
-                history_messages=history,
+                prompt=messages[-1]["content"],
+                system_prompt=messages[0]["content"],
+                history_messages=messages[1:-1],
                 max_tokens=2048,
             )
         )
