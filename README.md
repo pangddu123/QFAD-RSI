@@ -1,6 +1,6 @@
-# QAFD-RAG
+# QFAD-RSI · Target Writer
 
-Local Writer–Reader optimization: [native QFAD pipeline with SAGE rewards](experiments/sage_qfad/README.md).
+医学检索轨迹为多轮 Writer 提供文字反馈。训练入口、标量 RL 对照和评测命令见 [Target Writer 实验说明](research/medical_sage/TARGETED_WRITER.md)。
 
 Official code for ICLR 2026 paper: **[Query-Aware Flow Diffusion for Graph-Based RAG with Retrieval Guarantees](https://openreview.net/forum?id=n28wnc2QTc)**
 
