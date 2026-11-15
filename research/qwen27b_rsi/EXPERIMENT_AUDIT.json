@@ -1,0 +1,99 @@
+{
+  "audit_skill": "experiment-audit",
+  "verdict": "PASS",
+  "reason_code": "observed_writer_gain_lower_aggregate_deployment_tokens",
+  "summary": "The six-group updated Writer improves the matched pretraining pipeline from 111 to 122 of 197, exceeds RAW 118, and uses lower aggregate recorded deployment tokens. Shared seed is 120.",
+  "trace_path": "/mnt/mess/duxianghe/memos/medicalMemory/.aris/traces/experiment-audit/2026-11-15_qwen27b_full",
+  "agent_id": "/root/qwen27b_full_integrity",
+  "verdict_id": "qwen27b_full_integrity_002",
+  "reviewer_model": "gpt-6-astra",
+  "reviewer_family": "openai",
+  "reviewer_reasoning": "ultra",
+  "review_independence": "same-family",
+  "acceptance_status": "provisional",
+  "generated_at": "2026-11-15T06:50:41.180464+08:00",
+  "date": "2026-11-15",
+  "overall_verdict": "pass",
+  "integrity_status": "pass",
+  "checks": {
+    "gt_provenance": {
+      "status": "pass",
+      "details": "Dataset answer fields remain the references; inspected Writer observations contain query, feedback, source spans and graph, without reference-answer fields.",
+      "evidence": [
+        "QFAD-RSI/experiments/query_writer_rl.py:66",
+        "QFAD-RSI/experiments/qwen27b_rsi/train_writer.py:76",
+        "QFAD-RSI/experiments/qwen27b_rsi/graph_environment.py:94"
+      ]
+    },
+    "score_normalization": {
+      "status": "pass",
+      "details": "All completed full conditions match the same 197 dataset IDs (97 + 100); counts, denominators and exact-prompt reuse reconcile."
+    },
+    "result_existence": {
+      "status": "pass",
+      "details": "Both before/after evaluations cover all 197 dataset IDs. Updated Writer 122, pretraining Writer 111, shared seed 120 and RAW 118 reconcile with underlying records."
+    },
+    "execution_and_learning": {
+      "status": "pass",
+      "details": "Six groups and 24 actual optimizer steps connect to a matched greedy-generation and fixed-Reader 111-to-122 comparison; no downstream QA selection during generation.",
+      "evidence": [
+        "QFAD-RSI/experiments/qwen27b_rsi/train_writer.py:337",
+        "QFAD-RSI/experiments/qwen27b_rsi/policy_worker.py:164",
+        "results/qwen27b_rsi/writer_factual_checkpoint6_comparison.json:25"
+      ]
+    },
+    "scope": {
+      "status": "pass",
+      "details": "Observed adaptation on these 197 questions, with lower aggregate deployment counts. Training, curriculum selection, experimental evaluation and unmeasured seed annotation labor are separate. One final answer exceeds its individual RAW count by 735 tokens; per-query budget dominance is not claimed."
+    },
+    "eval_type": "real_gt"
+  },
+  "claims": [
+    {
+      "id": "actual_rl_updates",
+      "impact": "supported"
+    },
+    {
+      "id": "local_source_faithful_behavior_change",
+      "impact": "supported"
+    },
+    {
+      "id": "query_feedback_rl_writer_qa_gain_and_above_raw_aggregate_budget",
+      "impact": "supported_with_stated_scope"
+    },
+    {
+      "id": "first_search_124_vs_raw_118_lower_recorded_deployment_tokens",
+      "impact": "supported_as_trajectory_intervention"
+    },
+    {
+      "id": "each_patient_or_each_query_beats_raw",
+      "impact": "unsupported"
+    },
+    {
+      "id": "qa_reward_component_alone_causes_gain",
+      "impact": "not_isolated"
+    }
+  ],
+  "counts": {
+    "queries": 197,
+    "before": 111,
+    "after": 122,
+    "seed": 120,
+    "raw": 118,
+    "before_gained": 18,
+    "before_lost": 7,
+    "seed_gained": 10,
+    "seed_lost": 8,
+    "raw_wins": 13,
+    "raw_losses": 9
+  },
+  "budget": {
+    "qwen27b_tokens": 2264764,
+    "source_judge_tokens": 6233,
+    "feedback_judge_tokens": 8294,
+    "aggregate_llm_native_tokens": 2279291,
+    "embedding_upper_bound": 3425020,
+    "rerank_native_input_tokens": 7587684,
+    "raw_qwen27b_tokens": 3353678
+  }
+}

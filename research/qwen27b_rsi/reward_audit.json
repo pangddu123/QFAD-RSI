@@ -1,0 +1,301 @@
+{
+  "run": "results/qfad_fact_writer_rl_20261114/p12_rsi_round0",
+  "sample_count": 36,
+  "valid_samples": 24,
+  "positive_advantage_samples": 15,
+  "positive_advantage_with_unsupported_facts": 13,
+  "fully_supported_valid_samples": 2,
+  "checked_facts": 487,
+  "supported_facts": 376,
+  "support_labels": "Recorded source-verifier judgments, not independent clinical ground truth",
+  "samples": [
+    {
+      "step": 0,
+      "sample": 0,
+      "valid": true,
+      "advantage": -0.090568667345331,
+      "unsupported_fraction": 0.3888888888888889,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 0,
+      "sample": 1,
+      "valid": true,
+      "advantage": -0.025544339618396122,
+      "unsupported_fraction": 0.125,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 0,
+      "sample": 2,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 0,
+      "sample": 3,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 1,
+      "sample": 0,
+      "valid": true,
+      "advantage": 1.0969753576226597,
+      "unsupported_fraction": 0.3888888888888889,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 1,
+      "sample": 1,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 1,
+      "sample": 2,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 1,
+      "sample": 3,
+      "valid": true,
+      "advantage": 1.1059803864929383,
+      "unsupported_fraction": 0.35,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 2,
+      "sample": 0,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 2,
+      "sample": 1,
+      "valid": true,
+      "advantage": -1.0955184444993955,
+      "unsupported_fraction": 0.35,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 2,
+      "sample": 2,
+      "valid": true,
+      "advantage": -1.0812081818848123,
+      "unsupported_fraction": 0.29411764705882354,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 2,
+      "sample": 3,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 3,
+      "sample": 0,
+      "valid": true,
+      "advantage": -0.04947265625,
+      "unsupported_fraction": 0.1875,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 3,
+      "sample": 1,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 3,
+      "sample": 2,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 3,
+      "sample": 3,
+      "valid": true,
+      "advantage": -0.06123697916666667,
+      "unsupported_fraction": 0.23333333333333334,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 4,
+      "sample": 0,
+      "valid": true,
+      "advantage": 0.017384486077534882,
+      "unsupported_fraction": 0.0,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 4,
+      "sample": 1,
+      "valid": true,
+      "advantage": -0.03260576192873168,
+      "unsupported_fraction": 0.2,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 4,
+      "sample": 2,
+      "valid": true,
+      "advantage": 0.00010122929927669304,
+      "unsupported_fraction": 0.07142857142857142,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 4,
+      "sample": 3,
+      "valid": true,
+      "advantage": 0.017834732859269203,
+      "unsupported_fraction": 0.0,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 5,
+      "sample": 0,
+      "valid": true,
+      "advantage": -0.016685049019607844,
+      "unsupported_fraction": 0.058823529411764705,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 5,
+      "sample": 1,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 5,
+      "sample": 2,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 5,
+      "sample": 3,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 6,
+      "sample": 0,
+      "valid": true,
+      "advantage": 0.9649827266358783,
+      "unsupported_fraction": 0.13043478260869565,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 6,
+      "sample": 1,
+      "valid": true,
+      "advantage": 0.9556077263061933,
+      "unsupported_fraction": 0.16666666666666666,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 6,
+      "sample": 2,
+      "valid": true,
+      "advantage": 0.9750195190762357,
+      "unsupported_fraction": 0.09090909090909091,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 6,
+      "sample": 3,
+      "valid": true,
+      "advantage": 0.9522837376056822,
+      "unsupported_fraction": 0.18181818181818182,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 7,
+      "sample": 0,
+      "valid": true,
+      "advantage": 0.8932606887120071,
+      "unsupported_fraction": 0.43478260869565216,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 7,
+      "sample": 1,
+      "valid": true,
+      "advantage": 0.972872040499918,
+      "unsupported_fraction": 0.13043478260869565,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 7,
+      "sample": 2,
+      "valid": true,
+      "advantage": 0.9161500928153624,
+      "unsupported_fraction": 0.34615384615384615,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 7,
+      "sample": 3,
+      "valid": true,
+      "advantage": 0.886577057150353,
+      "unsupported_fraction": 0.4782608695652174,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 8,
+      "sample": 0,
+      "valid": true,
+      "advantage": -0.07676784081202993,
+      "unsupported_fraction": 0.26666666666666666,
+      "query_accuracy": 0.0
+    },
+    {
+      "step": 8,
+      "sample": 1,
+      "valid": true,
+      "advantage": 0.9267083013920849,
+      "unsupported_fraction": 0.2857142857142857,
+      "query_accuracy": 1.0
+    },
+    {
+      "step": 8,
+      "sample": 2,
+      "valid": false,
+      "advantage": -1.0,
+      "unsupported_fraction": null,
+      "query_accuracy": null
+    },
+    {
+      "step": 8,
+      "sample": 3,
+      "valid": true,
+      "advantage": 0.9578446020149656,
+      "unsupported_fraction": 0.1875,
+      "query_accuracy": 1.0
+    }
+  ]
+}

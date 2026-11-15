@@ -1,0 +1,1073 @@
+{
+  "data": "/mnt/mess/duxianghe/memos/medicalMemory/MedMemoryBench/data/MedMemoryBench_EN_mixed",
+  "patients": {
+    "1": {
+      "queries": 97,
+      "query_types": {
+        "entity_exact_match": 20,
+        "temporal_localization": 20,
+        "state_update": 10,
+        "inference_generation": 20,
+        "multiple_choice": 19,
+        "multi_hop_clinical_deduction": 8
+      },
+      "file_session_types": {
+        "family_health_consultation": 100,
+        "health_knowledge": 100,
+        "main": 101
+      },
+      "visible_session_types": {
+        "family_health_consultation": 100,
+        "health_knowledge": 99,
+        "main": 100
+      },
+      "visible_messages": 4144,
+      "checkpoints": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "source_key_point_occurrences": 450,
+      "max_source_points_per_query": 108,
+      "queries_with_over_10_source_points": 7,
+      "source_point_time_missing": 54,
+      "unresolved_source_session_ids": [
+        {
+          "query_id": "session_10_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_20_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_40_ig_2",
+          "source_session": 20240313
+        },
+        {
+          "query_id": "session_50_ig_1",
+          "source_session": 113
+        },
+        {
+          "query_id": "session_50_ig_1",
+          "source_session": 113
+        },
+        {
+          "query_id": "session_50_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_50_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_70_ig_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_70_ig_2",
+          "source_session": 148
+        },
+        {
+          "query_id": "session_80_ig_2",
+          "source_session": 999
+        },
+        {
+          "query_id": "session_90_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_100_ig_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_100_ig_2",
+          "source_session": 20240120
+        },
+        {
+          "query_id": "session_10_mq_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_10_mq_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_40_mq_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_60_mq_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_90_mq_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_90_mq_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_20_mcd_2",
+          "source_session": 0
+        }
+      ],
+      "valid_source_session_after_query_checkpoint": [],
+      "by_type": {
+        "entity_exact_match": {
+          "queries": 20,
+          "source_point_counts": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "multiple_source_sessions": 0
+        },
+        "temporal_localization": {
+          "queries": 20,
+          "source_point_counts": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "multiple_source_sessions": 0
+        },
+        "state_update": {
+          "queries": 10,
+          "source_point_counts": [
+            6,
+            3,
+            20,
+            65,
+            18,
+            39,
+            8,
+            108,
+            17,
+            33
+          ],
+          "multiple_source_sessions": 10
+        },
+        "inference_generation": {
+          "queries": 20,
+          "source_point_counts": [
+            1,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            1,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "multiple_source_sessions": 15
+        },
+        "multiple_choice": {
+          "queries": 19,
+          "source_point_counts": [
+            2,
+            3,
+            1,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            3,
+            1,
+            2,
+            1,
+            1,
+            2,
+            1,
+            3,
+            1,
+            1
+          ],
+          "multiple_source_sessions": 10
+        },
+        "multi_hop_clinical_deduction": {
+          "queries": 8,
+          "source_point_counts": [
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            2,
+            2
+          ],
+          "multiple_source_sessions": 8
+        }
+      },
+      "state_question_target_counts": {
+        "medication": 1,
+        "measurement": 5,
+        "behavior_or_preference": 2,
+        "symptom_or_experience": 2
+      },
+      "state_target_annotation": "Manual categorization of the question target, not clinical truth labels"
+    },
+    "2": {
+      "queries": 100,
+      "query_types": {
+        "entity_exact_match": 20,
+        "temporal_localization": 20,
+        "state_update": 10,
+        "inference_generation": 20,
+        "multiple_choice": 20,
+        "multi_hop_clinical_deduction": 10
+      },
+      "file_session_types": {
+        "family_health_consultation": 100,
+        "health_knowledge": 100,
+        "main": 101
+      },
+      "visible_session_types": {
+        "family_health_consultation": 100,
+        "health_knowledge": 99,
+        "main": 100
+      },
+      "visible_messages": 4148,
+      "checkpoints": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "source_key_point_occurrences": 394,
+      "max_source_points_per_query": 118,
+      "queries_with_over_10_source_points": 6,
+      "source_point_time_missing": 61,
+      "unresolved_source_session_ids": [
+        {
+          "query_id": "session_10_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_20_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_30_ig_1",
+          "source_session": 999
+        },
+        {
+          "query_id": "session_30_ig_1",
+          "source_session": 999
+        },
+        {
+          "query_id": "session_90_ig_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_90_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_100_ig_1",
+          "source_session": 999
+        },
+        {
+          "query_id": "session_100_ig_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_40_mq_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_40_mq_2",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_70_mq_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_90_mq_1",
+          "source_session": 0
+        },
+        {
+          "query_id": "session_80_mcd_1",
+          "source_session": 0
+        }
+      ],
+      "valid_source_session_after_query_checkpoint": [],
+      "by_type": {
+        "entity_exact_match": {
+          "queries": 20,
+          "source_point_counts": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "multiple_source_sessions": 0
+        },
+        "temporal_localization": {
+          "queries": 20,
+          "source_point_counts": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "multiple_source_sessions": 0
+        },
+        "state_update": {
+          "queries": 10,
+          "source_point_counts": [
+            11,
+            3,
+            4,
+            14,
+            28,
+            31,
+            30,
+            7,
+            118,
+            7
+          ],
+          "multiple_source_sessions": 10
+        },
+        "inference_generation": {
+          "queries": 20,
+          "source_point_counts": [
+            1,
+            2,
+            2,
+            2,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            1,
+            4,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "multiple_source_sessions": 13
+        },
+        "multiple_choice": {
+          "queries": 20,
+          "source_point_counts": [
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "multiple_source_sessions": 13
+        },
+        "multi_hop_clinical_deduction": {
+          "queries": 10,
+          "source_point_counts": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "multiple_source_sessions": 10
+        }
+      },
+      "state_question_target_counts": {
+        "behavior_or_preference": 3,
+        "measurement": 4,
+        "symptom_or_experience": 2,
+        "medication": 1
+      },
+      "state_target_annotation": "Manual categorization of the question target, not clinical truth labels"
+    }
+  },
+  "scope": "Patients 1 and 2 only. Annotation counts describe the release, not verified clinical evidence.",
+  "state_update_examples": [
+    {
+      "patient": 1,
+      "query_id": "session_10_sua_1",
+      "question": "The patient had previously been taking empagliflozin regularly. What is the patient’s current medication status regarding empagliflozin?",
+      "annotation_count": 6,
+      "target": "medication",
+      "source_sessions": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_20_sua_1",
+      "question": "The patient’s weight had been continuously decreasing previously. What was the patient’s weight status in February 2024?",
+      "annotation_count": 3,
+      "target": "measurement",
+      "source_sessions": [
+        1,
+        7,
+        11
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_30_sua_1",
+      "question": "Compared with the late-night eating strategy used during overtime in January, what was the patient’s late-night dietary baseline in March?",
+      "annotation_count": 20,
+      "target": "behavior_or_preference",
+      "source_sessions": [
+        1,
+        4,
+        6,
+        9,
+        10,
+        12,
+        16,
+        17,
+        18,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_40_sua_1",
+      "question": "Compared with two weeks ago, how have the patient’s brain fog symptoms in March 2024 changed?",
+      "annotation_count": 65,
+      "target": "symptom_or_experience",
+      "source_sessions": [
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        34,
+        35,
+        37,
+        38
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_50_sua_1",
+      "question": "Compared with the postprandial blood glucose values in January, what was the patient’s recorded postprandial blood glucose value on April 3?",
+      "annotation_count": 18,
+      "target": "measurement",
+      "source_sessions": [
+        2,
+        7,
+        11,
+        12,
+        14,
+        19,
+        25,
+        26,
+        27,
+        28,
+        30,
+        31,
+        38
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_60_sua_1",
+      "question": "Previously the patient was only willing to use a minimal three-point blood glucose monitoring plan. What was his blood glucose monitoring willingness status in March 2024?",
+      "annotation_count": 39,
+      "target": "behavior_or_preference",
+      "source_sessions": [
+        1,
+        4,
+        6,
+        9,
+        10,
+        12,
+        16,
+        17,
+        18,
+        21,
+        22,
+        23,
+        24,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        42,
+        43,
+        46,
+        47,
+        49,
+        50,
+        60
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_70_sua_1",
+      "question": "The patient’s initial HbA1c at the beginning of January was 9.2%. What is his most recent test value?",
+      "annotation_count": 8,
+      "target": "measurement",
+      "source_sessions": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        31,
+        64
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_80_sua_1",
+      "question": "Compared with the previously recorded 20–30 minutes, how did the time needed for the patient to recover from a sticky, sluggish state upon waking in the morning change in the 2024-09-03 record?",
+      "annotation_count": 108,
+      "target": "symptom_or_experience",
+      "source_sessions": [
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        34,
+        35,
+        37,
+        38,
+        41,
+        42,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        63,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        74,
+        75,
+        76,
+        78
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_90_sua_1",
+      "question": "In June, the patient’s heart rate upon waking in the morning was mostly in the low 80s to just over 90 bpm. What is the patient’s current morning waking heart rate?",
+      "annotation_count": 17,
+      "target": "measurement",
+      "source_sessions": [
+        1,
+        7,
+        11,
+        29,
+        46,
+        48,
+        51,
+        52,
+        53,
+        58,
+        64,
+        66,
+        75,
+        81,
+        88
+      ]
+    },
+    {
+      "patient": 1,
+      "query_id": "session_100_sua_1",
+      "question": "The patient’s urine albumin-to-creatinine ratio (UACR) recorded in July was 52 mg/g. What was the value on recheck in November?",
+      "annotation_count": 33,
+      "target": "measurement",
+      "source_sessions": [
+        2,
+        7,
+        11,
+        12,
+        14,
+        19,
+        25,
+        26,
+        27,
+        28,
+        30,
+        31,
+        38,
+        51,
+        55,
+        59,
+        70,
+        78,
+        82,
+        84,
+        86,
+        88,
+        89,
+        92,
+        94,
+        97
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_10_sua_1",
+      "question": "Previously, the patient always had procrastinating thoughts before injections, and the needle phobia pattern was threat-based. What pattern has it now shifted to?",
+      "annotation_count": 11,
+      "target": "behavior_or_preference",
+      "source_sessions": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_20_sua_1",
+      "question": "The patient’s blood pressure at the end of December 2023 was 135/82 mmHg. What was his recorded blood pressure in January?",
+      "annotation_count": 3,
+      "target": "measurement",
+      "source_sessions": [
+        6,
+        12,
+        15
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_30_sua_1",
+      "question": "Because of long-term needle phobia, the patient often experienced marked fear and procrastination when injecting insulin at home. What was the patient’s first observed facial homeostatic signal later on?",
+      "annotation_count": 4,
+      "target": "symptom_or_experience",
+      "source_sessions": [
+        1,
+        2,
+        6,
+        30
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_40_sua_1",
+      "question": "Did the patient’s urine albumin-to-creatinine ratio (UACR) in April change compared with the March record? What was the UACR in April?",
+      "annotation_count": 14,
+      "target": "measurement",
+      "source_sessions": [
+        3,
+        7,
+        10,
+        11,
+        13,
+        17,
+        20,
+        21,
+        27,
+        28,
+        37,
+        40
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_50_sua_1",
+      "question": "The patient used to do slow walking exercise in the community more often after dinner. If we now need to choose the exercise location that best matches his latest preference, what is his preferred exercise space in March 2024?",
+      "annotation_count": 28,
+      "target": "behavior_or_preference",
+      "source_sessions": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        16,
+        18,
+        21,
+        22,
+        24,
+        25,
+        33,
+        37,
+        38,
+        39,
+        41,
+        43,
+        45
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_60_sua_1",
+      "question": "In the past, the patient did not use any specific emotional stabilization method when refilling semaglutide. If the doctor asks him, “What is the latest emotional stabilization strategy you now use when refilling your medication?”, how should he answer?",
+      "annotation_count": 31,
+      "target": "behavior_or_preference",
+      "source_sessions": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        16,
+        18,
+        21,
+        22,
+        24,
+        25,
+        33,
+        37,
+        38,
+        39,
+        41,
+        43,
+        45,
+        56,
+        59
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_70_sua_1",
+      "question": "The patient’s urine albumin‑to‑creatinine ratio (UACR) was about 50 mg/g at the April follow‑up. What was the patient’s UACR in July?",
+      "annotation_count": 30,
+      "target": "measurement",
+      "source_sessions": [
+        3,
+        7,
+        10,
+        11,
+        13,
+        17,
+        20,
+        21,
+        27,
+        28,
+        37,
+        40,
+        42,
+        48,
+        49,
+        50,
+        54,
+        57,
+        58,
+        63,
+        64,
+        65,
+        66,
+        68
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_80_sua_1",
+      "question": "The patient’s blood pressure in January was maintained at about 128/76 mmHg. What was the patient’s home blood pressure measurement in May?",
+      "annotation_count": 7,
+      "target": "measurement",
+      "source_sessions": [
+        6,
+        12,
+        15,
+        33,
+        35,
+        47
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_90_sua_1",
+      "question": "Since the patient’s body entered an automatic autonomic steady-state mode on 2024-09-04, what is the current status (as of 2024) of the brief body “tightening” reaction after morning awakening in November 2024?",
+      "annotation_count": 118,
+      "target": "symptom_or_experience",
+      "source_sessions": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        19,
+        20,
+        21,
+        23,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        60,
+        61,
+        62,
+        63,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        86,
+        87,
+        88,
+        89,
+        90
+      ]
+    },
+    {
+      "patient": 2,
+      "query_id": "session_100_sua_1",
+      "question": "The patient’s dose of insulin degludec used to be 10 units every night. What was it later adjusted to?",
+      "annotation_count": 7,
+      "target": "medication",
+      "source_sessions": [
+        1,
+        2,
+        6,
+        30,
+        31,
+        52,
+        67
+      ]
+    }
+  ]
+}
