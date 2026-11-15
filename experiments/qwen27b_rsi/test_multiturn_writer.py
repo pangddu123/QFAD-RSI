@@ -81,20 +81,33 @@ class CreditTests(unittest.TestCase):
         def request(p):
             packets.append(p)
             if p['operation'] == 'sample':
-                return {'event': 'samples', 'policy_step': 0, 'rows': [{'index': i} for i in range(p['count'])]}
+                start = int(p['id'].rsplit('b', 1)[1]) if '_t0_' in p['id'] else 0
+                return {'event': 'samples', 'policy_step': 0, 'rows': [
+                    {'index': start+i, 'text': str(start+i)} for i in range(p['count'])]}
             return {'event': 'updated', 'step': 1, 'adapter_delta_l2': 1.,
                     'guided_turns': len(p['turn_guidance']), 'targeted_reverse_kl': .2}
         window = [{'patient': 1, 'id': s, 'source_ids': [s], 'queries': [self.query]} for s in ('a', 'b')]
-        with TemporaryDirectory() as tmp, patch('train_extractor.apply_sample', side_effect=apply):
-            _, state = train_window(window, Graph(), 'g', 17, request, evaluator, scorer, None, Path(tmp), .1)
-            credit = json.loads((Path(tmp) / 'g_b1.credit.json').read_text())
-        self.assertEqual(state.writes, (('a', 0), ('b', 0)))
-        self.assertEqual([p['operation'] for p in packets], ['sample'] * 5 + ['update'])
-        for b, p in enumerate(packets[1:5]):
-            self.assertEqual(json.loads(p['messages'][-1]['content'])['existing_facts'], {'a': {'sample': b}})
-            self.assertNotIn('SECRET ANNOTATION', str(p['messages']))
-        update = packets[-1]
-        self.assertEqual([len(path) for path in update['trajectories']], [2] * 4)
-        self.assertEqual([(r['group'], r['row']) for r in update['turn_guidance']],
-                         [('g_t0_b0', 1), ('g_t0_b0', 2), ('g_t0_b0', 3)])
-        self.assertEqual([bool(h) for h in credit['hints_by_turn']], [True, False])
+        for group_size in (4, 9):
+            with self.subTest(group_size=group_size), TemporaryDirectory() as tmp, patch(
+                    'train_extractor.apply_sample', side_effect=apply):
+                packets.clear()
+                report, state = train_window(window, Graph(), 'g', 17, request, evaluator, scorer, None,
+                                             Path(tmp), .1, group_size=group_size)
+                credit = json.loads((Path(tmp) / 'g_b1.credit.json').read_text())
+                self.assertEqual(state.writes, (('a', 0), ('b', 0)))
+                first = [p for p in packets if '_t0_' in p['id']]
+                self.assertEqual([p['count'] for p in first], [4] if group_size == 4 else [4, 4, 1])
+                follow = [p for p in packets if '_t1_' in p['id']]
+                self.assertEqual(len(follow), group_size)
+                self.assertEqual(len({p['seed'] for p in first + follow}), len(first + follow))
+                for b, packet in enumerate(follow):
+                    observation = json.loads(packet['messages'][-1]['content'])
+                    self.assertEqual(observation['existing_facts'], {'a': {'sample': b}})
+                    self.assertNotIn('SECRET ANNOTATION', str(packet['messages']))
+                update = packets[-1]
+                self.assertEqual([p['operation'] for p in packets].count('update'), 1)
+                self.assertEqual([len(path) for path in update['trajectories']], [2] * group_size)
+                self.assertEqual([(r['group'], r['row']) for r in update['turn_guidance']],
+                                 [(f'g_t0_b{4*(b//4)}', b%4) for b in range(1, group_size)])
+                self.assertEqual(report['distinct_output_trajectories'], group_size)
+                self.assertEqual([bool(h) for h in credit['hints_by_turn']], [True, False])

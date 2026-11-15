@@ -27,7 +27,10 @@ def validate_requirements(requirements, graph, stage):
         if not bundle['conditions']:
             raise ValueError('Evidence bundle has no conditions')
         for condition in bundle['conditions']:
-            if not condition['description'].strip() or not condition['anchors']:
+            session_sources = condition.get('session_source_ids', [])
+            if any(sid not in graph.sources or graph.sources[sid]['stage'] > stage for sid in session_sources):
+                raise ValueError('Annotated source session is outside the visible patient history')
+            if not condition['description'].strip() or not (condition['anchors'] or session_sources):
                 raise ValueError('Evidence condition needs source-anchored meaning')
             for anchor in condition['anchors']:
                 source = graph.sources[anchor['source_id']]

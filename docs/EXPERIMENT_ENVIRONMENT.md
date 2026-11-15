@@ -59,4 +59,4 @@ export PYTHONPATH="$PWD/experiments:$PWD/src:$PWD/../../baselines/QAFD-RAG/.deps
 CUDA_VISIBLE_DEVICES='' ../MedMemoryBench/.venv/bin/python -m unittest discover -s experiments/qwen27b_rsi -p 'test_*.py'
 ```
 
-完整实验顺序、GPU 阶段的副作用和命令见 [Target Writer 实验说明](../research/medical_sage/TARGETED_WRITER.md)。`prepare` 准备协议，`pilot` 训练 scalar 与 guided 并与冻结组配对评测，`full` 读取已有 checkpoint。现有多轮协议有 7 道训练题；pilot 为患者 1、2 的 68 个来源块、14 道留出题，full 为患者 3、4 的 3,541 个来源块、189 道题。验收分别看 `rl_gain`（guided 超过冻结）、`guidance_gain_over_scalar`（文字反馈的额外收益）和 `beats_raw`。当前交接已核验 CPU 测试与协议规模，尚无该协议超越 RAW-RAG 的已核验配对结果。
+完整实验顺序、GPU 阶段的副作用和命令见 [Target Writer 实验说明](../research/medical_sage/TARGETED_WRITER.md)。`prepare` 准备协议，`pilot` 训练 scalar 与 guided 并与冻结组配对评测，`full` 读取已有 checkpoint。旧联调协议（`prepare --smoke`）有 7 道训练题，pilot 有 14 道留出题。2026-11-16 起，默认清单按患者拆分为 482 道训练题、197 道验证题、189 道最终比较题。每个窗口的真实采样数由准备阶段的 `--group-size` 确定。验收分别看 `rl_gain`（guided 超过冻结）、`guidance_gain_over_scalar`（文字反馈的额外收益）和 `beats_raw`。当前交接已核验 CPU 测试与协议规模，尚无该协议超越 RAW-RAG 的已核验配对结果。

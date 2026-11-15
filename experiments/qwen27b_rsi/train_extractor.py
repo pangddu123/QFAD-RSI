@@ -60,7 +60,8 @@ def episode_windows(episodes, size):
         raise ValueError('A trajectory requires at least one write')
     window = []
     for episode in episodes:
-        if window and (episode['patient'] != window[0]['patient'] or len(window) == size):
+        past_query = any(q['stage'] < episode.get('source_stage', -1) for e in window for q in e['queries'])
+        if window and (episode['patient'] != window[0]['patient'] or len(window) == size or past_query):
             yield window
             window = []
         window.append(episode)
@@ -68,9 +69,9 @@ def episode_windows(episodes, size):
         yield window
 
 
-def train_window(window, initial, group, seed, request, evaluator, scorer, judge, out, weight):
-    """Four independent on-policy trajectories, followed by one group update."""
-    branches = [{'graphs': [initial], 'turns': [], 'path': []} for _ in range(4)]
+def train_window(window, initial, group, seed, request, evaluator, scorer, judge, out, weight, group_size=4):
+    """Independent on-policy trajectories, followed by one group update."""
+    branches = [{'graphs': [initial], 'turns': [], 'path': [], 'outputs': []} for _ in range(group_size)]
     base.write_json(out / f'{group}.before_graph.json', initial.state)
     queries = {}
     sampled_step = None
@@ -80,15 +81,17 @@ def train_window(window, initial, group, seed, request, evaluator, scorer, judge
             if previous != item:
                 raise ValueError('Conflicting annotations for a repeated query')
         # The first observation is shared. Later observations depend on each branch's own writes.
-        for b, branch in enumerate(branches if t else branches[:1]):
+        batch_size = 1 if t else 4
+        for b in range(0, group_size, batch_size):
+            branch = branches[b]
             graph = branch['graphs'][-1]
             sources = [graph.sources[sid] for sid in episode['source_ids']]
             stage = min(s['stage'] for s in sources)
             existing = dict(list(graph.visible_facts(stage).items())[-8:])
             messages = extraction_messages(sources, existing)
             key = f'{group}_t{t}_b{b}'
-            count = 1 if t else len(branches)
-            samples = request({'operation': 'sample', 'id': key, 'messages': messages, 'seed': seed + 4*t + b,
+            count = min(batch_size, group_size - b)
+            samples = request({'operation': 'sample', 'id': key, 'messages': messages, 'seed': seed + group_size*t + b,
                                'max_tokens': 3072, 'count': count})
             if sampled_step is None:
                 sampled_step = samples['policy_step']
@@ -97,10 +100,11 @@ def train_window(window, initial, group, seed, request, evaluator, scorer, judge
             base.write_json(out / f'{key}.observation.json', messages)
             base.write_json(out / f'{key}.samples.json', samples)
             for row_index, row in enumerate(samples['rows']):
-                dest = branch if t else branches[row_index]
+                dest = branch if t else branches[b + row_index]
                 result, next_graph = apply_sample(row, graph, sources, existing, judge)
                 dest['turns'].append({**result, 'sources': {s['source_id']: s for s in sources}, 'messages': messages})
                 dest['graphs'].append(next_graph)
+                dest['outputs'].append(row['text'])
                 dest['path'].append({'group': key, 'row': row_index})
 
     items = list(queries.values())
@@ -153,7 +157,8 @@ def train_window(window, initial, group, seed, request, evaluator, scorer, judge
                 for branch, (_, hints) in zip(branches, scored)
                 for action, turn, hint in zip(branch['path'], branch['turns'], hints, strict=True) if hint]
     report = {'episodes': [e['id'] for e in window], 'policy_step': sampled_step, 'rewards': rewards,
-              'advantages': advantages, 'trajectories': paths}
+              'advantages': advantages, 'trajectories': paths, 'sampled_trajectories': len(paths),
+              'distinct_output_trajectories': len({tuple(b['outputs']) for b in branches})}
     if any(advantages) or (weight and guidance):
         extras = {'turn_guidance': guidance, 'guidance_weight': weight} if weight else {}
         update = request({'operation': 'update', 'id': group, 'trajectories': paths,
@@ -188,7 +193,12 @@ def main():
     assert calibration['cases'] == 14 and not calibration['failures'], 'Clinical calibration must pass before training'
     plan = base.read(args.plan)
     turns_per_rollout = plan.get('turns_per_rollout', 3) if args.guidance_weight is not None else 1
-    assert plan['episodes'] and all(e['patient'] in (1, 2) for e in plan['episodes'])
+    group_size = plan.get('group_size', 4)
+    if type(group_size) is not int or group_size < 2 or (args.guidance_weight is None and group_size != 4):
+        raise ValueError('Targeted group size must be >= 2; legacy single-write training uses 4')
+    allowed = set(plan.get('patient_split', {}).get('train', [1, 2]))
+    if not plan['episodes'] or {e['patient'] for e in plan['episodes']} - allowed:
+        raise ValueError('Episode outside the configured training patients')
     assert not args.out.exists(), 'Use a new output directory for a new training run'
     graphs = {pid: NavigationGraph(base.Patient(pid, store_names=('chunk',)))
               for pid in sorted({e['patient'] for e in plan['episodes']})}
@@ -207,7 +217,7 @@ def main():
     args.out.mkdir(parents=True)
     base.write_json(args.out / 'configuration.json', {
         'process_id': os.getpid(), 'plan': plan, 'resume': args.resume,
-        'model': 'Qwen3.8-27B', 'policy_quantization': 'NF4', 'sample_count': 4,
+        'model': 'Qwen3.8-27B', 'policy_quantization': 'NF4', 'sample_count': group_size,
         'max_output_tokens': 3072, 'source_only_writer': True,
         'reader': 'Fixed QFAD with original-source windows', 'answerer': 'Fixed Qwen3.8-27B-FP8',
         'reward': 'Supported answer count + 0.5 mean clinical coverage - 0.25 rejected-atom fraction',
@@ -251,8 +261,8 @@ def main():
                 graph = graphs[episode['patient']]
                 if args.guidance_weight is not None:
                     result, graphs[episode['patient']] = train_window(window, graph, f'group{index}',
-                        17 + index * 4 * turns_per_rollout, request, evaluator, evidence_scorer, judge,
-                        args.out, args.guidance_weight)
+                        17 + index * group_size * turns_per_rollout, request, evaluator, evidence_scorer, judge,
+                        args.out, args.guidance_weight, group_size)
                     results.append(result)
                     base.write_json(args.out / 'groups.json', results)
                     base.write_json(args.out / 'rollout_state.json', {str(pid): g.state for pid, g in graphs.items()})
@@ -308,6 +318,9 @@ def main():
                        'initial_step': runtime['step'], 'final_step': closed['step'],
                        'remote_checkpoint': remote_out + '/checkpoint.pt' if closed['step'] > runtime['step'] else None,
                        'scope': 'Batch-extraction training execution, not a full-patient accuracy result'}
+            if args.guidance_weight is not None:
+                summary['sampled_trajectories'] = sum(r['sampled_trajectories'] for r in results)
+                summary['windows_with_reward_variation'] = sum(len(set(r['rewards'])) > 1 for r in results)
             base.write_json(args.out / 'summary.json', summary)
             base.write_json(args.out / 'complete.json', {'worker_exit': worker.returncode, 'final_step': closed['step']})
             print(json.dumps(summary), flush=True)

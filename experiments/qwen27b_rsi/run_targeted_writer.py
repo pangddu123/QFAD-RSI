@@ -9,7 +9,7 @@ import uuid
 
 from medical_navigation import NavigationGraph, base
 from prepare_extraction_training import training_plan
-from train_extractor import REMOTE
+from train_extractor import REMOTE, episode_windows
 
 
 HERE = Path(__file__).resolve().parent
@@ -40,19 +40,44 @@ def make_cohort(patients, last_stage, excluded):
     return sources, queries
 
 
-def prepare(out, weight, plan_path):
+def prepare(out, weight, plan_path, group_size=None, smoke=False):
     if not 0 < weight < float('inf'):
         raise ValueError('Expected a positive finite distillation weight')
-    plan = base.read(plan_path) if plan_path else training_plan()
+    if plan_path:
+        plan = base.read(plan_path)
+    elif smoke:
+        plan = training_plan()
+    else:
+        from benchmark_curriculum import training_plan as benchmark_plan
+        plan = benchmark_plan()
+    split = plan.get('patient_split')
+    group_size = group_size if group_size is not None else plan.get('group_size', 8 if split else 4)
+    if type(group_size) is not int or group_size < 2:
+        raise ValueError('group_size must be an integer >= 2')
+    plan['group_size'] = group_size
     training = {f'p{e["patient"]}_{q["query_id"]}' for e in plan['episodes'] for q in e['queries']}
-    if not training or any(e['patient'] not in (1, 2) for e in plan['episodes']):
-        raise ValueError('Training requires queries from patients 1 or 2')
+    train_ids = {e['patient'] for e in plan['episodes']}
+    if split:
+        if split['validation'] != [1, 2] or split['test'] != [3, 4]:
+            raise ValueError('Existing paired RAW scores cover validation patients 1/2 and test patients 3/4')
+        if train_ids != set(split['train']) or train_ids.intersection(split['validation'] + split['test']):
+            raise ValueError('Expected disjoint training, validation and test patients')
+    elif train_ids - {1, 2}:
+        raise ValueError('Larger curricula require a declared patient_split')
+    if not training:
+        raise ValueError('Empty training cohort')
+    windows = list(episode_windows(plan['episodes'], plan.get('turns_per_rollout', 3)))
+    sampling = {'group_size': group_size, 'distinct_queries': len(training),
+                'train_patients': sorted(train_ids), 'writes': len(plan['episodes']),
+                'query_write_pairs': sum(len(e['queries']) for e in plan['episodes']),
+                'windows_per_arm': len(windows), 'planned_trajectories_per_arm': len(windows) * group_size,
+                'planned_sampled_writes_per_arm': len(plan['episodes']) * group_size}
     out.mkdir(parents=True, exist_ok=False)
     base.write_json(out / 'training.json', plan)
     counts = {}
-    for phase, patients, stage in [('pilot', [1, 2], 0), ('full', [3, 4], None)]:
+    for phase, patients, stage in [('pilot', [1, 2], None if split else 0), ('full', [3, 4], None)]:
         sources, queries = make_cohort(patients, stage, training)
-        if phase == 'pilot':
+        if phase == 'pilot' and not split:
             # Same compact source pool in all arms. Read only the original
             # retriever's delivered IDs, without reading its answer or grade as a feature.
             traces = base.ROOT / 'results/qwen27b_rsi/initial_full/answers'
@@ -66,11 +91,11 @@ def prepare(out, weight, plan_path):
         counts[phase] = {'patients': patients, 'source_blocks': len(sources), 'queries': len(queries)}
     base.write_json(out / 'protocol.json', {
         'id': uuid.uuid4().hex, 'guidance_weight': weight, 'cohorts': counts,
-        'arms': ARMS, 'training_queries': sorted(training),
-        'pilot_memory': 'Union of first six delivered sources per pilot query from the saved initial QFAD Reader',
+        'sampling': sampling, 'patient_split': split, 'arms': ARMS, 'training_queries': sorted(training),
+        'pilot_memory': 'All visible sources at every validation checkpoint' if split else 'Union of first six delivered sources per pilot query from the saved initial QFAD Reader',
         'pilot_pass': 'guided correct count strictly exceeds frozen on paired nontraining queries',
         'full_pass': 'guided correct count strictly exceeds both frozen and RAW-RAG on patients 3 and 4'})
-    print(json.dumps(counts))
+    print(json.dumps({'sampling': sampling, 'cohorts': counts}))
 
 
 def deploy_worker():
@@ -163,11 +188,16 @@ def main():
     parser.add_argument('stage', choices=['prepare', 'pilot', 'full'])
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--weight', type=float, default=.1, help='Distillation weight at preparation')
-    parser.add_argument('--train-plan', type=Path, help='Optional source-anchored training curriculum')
+    parser.add_argument('--group-size', type=int, help='Trajectories per update group at preparation (benchmark default 8)')
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument('--smoke', action='store_true', help='Prepare the original small integration protocol')
+    selection.add_argument('--train-plan', type=Path, help='Optional source-anchored training curriculum')
     args = parser.parse_args()
     if args.stage == 'prepare':
-        prepare(args.out, args.weight, args.train_plan)
+        prepare(args.out, args.weight, args.train_plan, args.group_size, args.smoke)
     else:
+        if args.group_size is not None or args.smoke or args.train_plan:
+            parser.error('Sampling and curriculum options are fixed by prepare')
         execute(args.out, args.stage)
 
 
