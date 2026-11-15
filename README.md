@@ -1,5 +1,7 @@
 # QFAD-RSI · Target Writer
 
+**换仓库继续开发**：[当前实验环境与开发交接](docs/EXPERIMENT_ENVIRONMENT.md)。包含开发机检查命令、原实验机目录、依赖版本、训练服务与验证范围。
+
 医学检索轨迹为多轮 Writer 提供文字反馈。训练入口、标量 RL 对照和评测命令见 [Target Writer 实验说明](research/medical_sage/TARGETED_WRITER.md)。
 
 Official code for ICLR 2026 paper: **[Query-Aware Flow Diffusion for Graph-Based RAG with Retrieval Guarantees](https://openreview.net/forum?id=n28wnc2QTc)**
