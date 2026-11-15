@@ -2,7 +2,6 @@
 import argparse
 import hashlib
 import json
-import shlex
 from pathlib import Path
 import subprocess
 import sys
@@ -79,9 +78,16 @@ def deploy_worker():
     digest = hashlib.sha256(source).hexdigest()
     path = f'{REMOTE}/policy_worker_{digest}.py'
     # Transfer only this module. Concurrent deployments publish identical bytes atomically.
-    script = (f'set -eu; t=$(mktemp {REMOTE}/worker.XXXXXX); trap \'rm -f "$t"\' EXIT; '
-              f'cat > "$t"; echo "{digest}  $t" | sha256sum -c - >&2; mv "$t" {path}')
-    subprocess.run(['ssh', '-T', 'win', 'ssh 2A100 ' + shlex.quote(script)], input=source, check=True)
+    # The jump host runs Windows cmd.exe. Send shell syntax to Linux on stdin.
+    delimiter = f'QFAD_WORKER_{digest}'
+    if not source.endswith(b'\n') or delimiter.encode() in source.splitlines():
+        raise ValueError('Worker source cannot be embedded verbatim in the deployment script')
+    header = (f'set -eu\nt=$(mktemp {REMOTE}/worker.XXXXXX)\n'
+              f'trap \'rm -f "$t"\' EXIT\ncat > "$t" <<\'{delimiter}\'\n')
+    footer = (f'{delimiter}\necho "{digest}  $t" | sha256sum -c - >&2\n'
+              f'mv "$t" {path}\n')
+    subprocess.run(['ssh', '-T', 'win', 'ssh -T 2A100 bash -s'],
+                   input=header.encode() + source + footer.encode(), check=True)
     return path
 
 
