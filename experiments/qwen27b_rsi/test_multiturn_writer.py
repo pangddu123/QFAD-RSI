@@ -110,4 +110,5 @@ class CreditTests(unittest.TestCase):
                 self.assertEqual([(r['group'], r['row']) for r in update['turn_guidance']],
                                  [(f'g_t0_b{4*(b//4)}', b%4) for b in range(1, group_size)])
                 self.assertEqual(report['distinct_output_trajectories'], group_size)
+                self.assertEqual(report['fully_parsed_trajectories'], group_size)
                 self.assertEqual([bool(h) for h in credit['hints_by_turn']], [True, False])

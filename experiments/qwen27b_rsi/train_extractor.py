@@ -158,7 +158,8 @@ def train_window(window, initial, group, seed, request, evaluator, scorer, judge
                 for action, turn, hint in zip(branch['path'], branch['turns'], hints, strict=True) if hint]
     report = {'episodes': [e['id'] for e in window], 'policy_step': sampled_step, 'rewards': rewards,
               'advantages': advantages, 'trajectories': paths, 'sampled_trajectories': len(paths),
-              'distinct_output_trajectories': len({tuple(b['outputs']) for b in branches})}
+              'distinct_output_trajectories': len({tuple(b['outputs']) for b in branches}),
+              'fully_parsed_trajectories': sum(all(turn['parsed'] for turn in b['turns']) for b in branches)}
     if any(advantages) or (weight and guidance):
         extras = {'turn_guidance': guidance, 'guidance_weight': weight} if weight else {}
         update = request({'operation': 'update', 'id': group, 'trajectories': paths,
@@ -320,6 +321,7 @@ def main():
                        'scope': 'Batch-extraction training execution, not a full-patient accuracy result'}
             if args.guidance_weight is not None:
                 summary['sampled_trajectories'] = sum(r['sampled_trajectories'] for r in results)
+                summary['fully_parsed_trajectories'] = sum(r['fully_parsed_trajectories'] for r in results)
                 summary['windows_with_reward_variation'] = sum(len(set(r['rewards'])) > 1 for r in results)
             base.write_json(args.out / 'summary.json', summary)
             base.write_json(args.out / 'complete.json', {'worker_exit': worker.returncode, 'final_step': closed['step']})
